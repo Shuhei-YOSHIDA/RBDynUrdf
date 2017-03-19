@@ -37,16 +37,16 @@ if __name__ == '__main__':
   import_rbd_types(rbdyn_urdf)
 
   # build list type
-  rbdyn_urdf.add_container('std::map<int, double>', ('int', 'double'), 'map')
+  rbdyn_urdf.add_container('std::map<std::string, double>', ('std::string', 'double'), 'map')
 
   # build struct
   limits = rbdyn_urdf.add_struct('Limits')
-  limits.add_instance_attribute('ql', 'std::map<int, double>')
-  limits.add_instance_attribute('qu', 'std::map<int, double>')
-  limits.add_instance_attribute('vl', 'std::map<int, double>')
-  limits.add_instance_attribute('vu', 'std::map<int, double>')
-  limits.add_instance_attribute('tl', 'std::map<int, double>')
-  limits.add_instance_attribute('tu', 'std::map<int, double>')
+  limits.add_instance_attribute('ql', 'std::map<std::string, double>')
+  limits.add_instance_attribute('qu', 'std::map<std::string, double>')
+  limits.add_instance_attribute('vl', 'std::map<std::string, double>')
+  limits.add_instance_attribute('vu', 'std::map<std::string, double>')
+  limits.add_instance_attribute('tl', 'std::map<std::string, double>')
+  limits.add_instance_attribute('tu', 'std::map<std::string, double>')
 
   urdf = rbdyn_urdf.add_struct('Urdf')
   urdf.add_instance_attribute('mbg', 'rbd::MultiBodyGraph')
