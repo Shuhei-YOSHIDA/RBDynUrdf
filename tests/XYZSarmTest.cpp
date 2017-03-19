@@ -39,8 +39,8 @@ const double TOL = 1e-6;
 
 void checkModel(rbdyn_urdf::Urdf urdf1, rbdyn_urdf::Urdf urdf2)
 {
-  rbd::MultiBody mb1(urdf1.mbg.makeMultiBody(0, true));
-  rbd::MultiBody mb2(urdf2.mbg.makeMultiBody(0, true));
+  rbd::MultiBody mb1(urdf1.mbg.makeMultiBody("b0", true));
+  rbd::MultiBody mb2(urdf2.mbg.makeMultiBody("b0", true));
 
   // basic check
   BOOST_CHECK_EQUAL(mb1.nrBodies(), mb2.nrBodies());
@@ -93,7 +93,7 @@ void checkModel(rbdyn_urdf::Urdf urdf1, rbdyn_urdf::Urdf urdf2)
     const rbd::Body& b1 = mb1.body(i);
     const rbd::Body& b2 = mb2.body(i);
 
-    BOOST_CHECK_EQUAL(b1.id(), b2.id());
+    //BOOST_CHECK_EQUAL(b1.id(), b2.id());
     BOOST_CHECK_EQUAL(b1.name(), b2.name());
 
     BOOST_CHECK_EQUAL(b1.inertia().mass(), b2.inertia().mass());
@@ -108,7 +108,7 @@ void checkModel(rbdyn_urdf::Urdf urdf1, rbdyn_urdf::Urdf urdf2)
     const rbd::Joint& j1 = mb1.joint(i);
     const rbd::Joint& j2 = mb2.joint(i);
 
-    BOOST_CHECK_EQUAL(j1.id(), j2.id());
+    //BOOST_CHECK_EQUAL(j1.id(), j2.id());
     BOOST_CHECK_EQUAL(j1.name(), j2.name());
     BOOST_CHECK_EQUAL(j1.type(), j2.type());
     BOOST_CHECK_EQUAL(j1.direction(), j2.direction());

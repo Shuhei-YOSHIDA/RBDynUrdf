@@ -150,11 +150,11 @@ rbdyn_urdf::Urdf makeXYZSarm()
         0.0 , 0.3 , 0.0,
         0.0 , 0.0 , 0.251;
 
-  Body b0(1., Vector3d::Zero(), I0, 0, "b0");
-  Body b1(5., Vector3d(0., 0.5, 0.), I1, 1, "b1");
-  Body b2(2., Vector3d(0., 0.5, 0.), I2, 2, "b2");
-  Body b3(1.5, Vector3d(0., 0.5, 0.), I3, 3, "b3");
-  Body b4(1., Vector3d(0.5, 0., 0.), I4, 4, "b4");
+  Body b0(1., Vector3d::Zero(), I0, "b0");
+  Body b1(5., Vector3d(0., 0.5, 0.), I1, "b1");
+  Body b2(2., Vector3d(0., 0.5, 0.), I2, "b2");
+  Body b3(1.5, Vector3d(0., 0.5, 0.), I3, "b3");
+  Body b4(1., Vector3d(0.5, 0., 0.), I4, "b4");
 
   urdf.mbg.addBody(b0);
   urdf.mbg.addBody(b1);
@@ -162,10 +162,10 @@ rbdyn_urdf::Urdf makeXYZSarm()
   urdf.mbg.addBody(b3);
   urdf.mbg.addBody(b4);
 
-  Joint j0(Joint::RevX, true, 0, "j0");
-  Joint j1(Joint::RevY, true, 1, "j1");
-  Joint j2(Joint::RevZ, true, 2, "j2");
-  Joint j3(Joint::RevX, true, 3, "j3");
+  Joint j0(Joint::RevX, true, "j0");
+  Joint j1(Joint::RevY, true, "j1");
+  Joint j2(Joint::RevZ, true, "j2");
+  Joint j3(Joint::RevX, true, "j3");
 
   urdf.mbg.addJoint(j0);
   urdf.mbg.addJoint(j1);
@@ -176,36 +176,36 @@ rbdyn_urdf::Urdf makeXYZSarm()
   PTransformd to(Vector3d(0., 1., 0.));
   PTransformd from(PTransformd::Identity());
 
-  urdf.mbg.linkBodies(0, to, 1, from, 0);
-  urdf.mbg.linkBodies(1, to, 2, from, 1);
-  urdf.mbg.linkBodies(2, to, 3, from, 2);
-  urdf.mbg.linkBodies(1, PTransformd(sva::RotX(1.), Vector3d(1., 0., 0.)),
-                      4, from, 3);
+  urdf.mbg.linkBodies("b0", to, "b1", from, "j0");
+  urdf.mbg.linkBodies("b1", to, "b2", from, "j1");
+  urdf.mbg.linkBodies("b2", to, "b3", from, "j2");
+  urdf.mbg.linkBodies("b1", PTransformd(sva::RotX(1.), Vector3d(1., 0., 0.)),
+                      "b4", from, "j3");
 
   // fill limits
-  urdf.limits.ql[0] = -1.;
-  urdf.limits.ql[1] = -1.;
-  urdf.limits.ql[2] = -1.;
+  urdf.limits.ql["j0"] = -1.;
+  urdf.limits.ql["j1"] = -1.;
+  urdf.limits.ql["j2"] = -1.;
 
-  urdf.limits.qu[0] = 1.;
-  urdf.limits.qu[1] = 1.;
-  urdf.limits.qu[2] = 1.;
+  urdf.limits.qu["j0"] = 1.;
+  urdf.limits.qu["j1"] = 1.;
+  urdf.limits.qu["j2"] = 1.;
 
-  urdf.limits.vl[0] = -10.;
-  urdf.limits.vl[1] = -10.;
-  urdf.limits.vl[2] = -10.;
+  urdf.limits.vl["j0"] = -10.;
+  urdf.limits.vl["j1"] = -10.;
+  urdf.limits.vl["j2"] = -10.;
 
-  urdf.limits.vu[0] = 10.;
-  urdf.limits.vu[1] = 10.;
-  urdf.limits.vu[2] = 10.;
+  urdf.limits.vu["j0"] = 10.;
+  urdf.limits.vu["j1"] = 10.;
+  urdf.limits.vu["j2"] = 10.;
 
-  urdf.limits.tl[0] = -50.;
-  urdf.limits.tl[1] = -50.;
-  urdf.limits.tl[2] = -50.;
+  urdf.limits.tl["j0"] = -50.;
+  urdf.limits.tl["j1"] = -50.;
+  urdf.limits.tl["j2"] = -50.;
 
-  urdf.limits.tu[0] = 50.;
-  urdf.limits.tu[1] = 50.;
-  urdf.limits.tu[2] = 50.;
+  urdf.limits.tu["j0"] = 50.;
+  urdf.limits.tu["j1"] = 50.;
+  urdf.limits.tu["j2"] = 50.;
 
   return std::move(urdf);
 }
