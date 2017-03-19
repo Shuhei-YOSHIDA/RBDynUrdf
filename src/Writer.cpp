@@ -76,7 +76,7 @@ void fillUrdfJoint(const rbd::Joint& rbdJ, const Limits& limits, urdf::Joint& ur
     urdfJ.type = urdf::Joint::FIXED;
     break;
   case rbd::Joint::Rev:
-    if(exist(limits.ql, rbdJ.id()) && exist(limits.qu, rbdJ.id()))
+    if(exist(limits.ql, rbdJ.name()) && exist(limits.qu, rbdJ.name()))
     {
         urdfJ.type = urdf::Joint::REVOLUTE;
     }
@@ -169,28 +169,28 @@ void writeUrdf(const std::string& filename, const std::string& robotName,
 
     // only export limits if there is position limits or
     // velocity and effort limits
-    if((exist(limits.ql, j.id()) && exist(limits.qu, j.id())) ||
-       ((exist(limits.vl, j.id()) && exist(limits.vu, j.id())) &&
-        (exist(limits.tl, j.id()) && exist(limits.tu, j.id()))))
+    if((exist(limits.ql, j.name()) && exist(limits.qu, j.name())) ||
+       ((exist(limits.vl, j.name()) && exist(limits.vu, j.name())) &&
+        (exist(limits.tl, j.name()) && exist(limits.tu, j.name()))))
     {
       urdf::JointLimits urdfLimits;
 
-      if(exist(limits.ql, j.id()) && exist(limits.qu, j.id()))
+      if(exist(limits.ql, j.name()) && exist(limits.qu, j.name()))
       {
-        urdfLimits.lower = limits.ql.at(j.id());
-        urdfLimits.upper = limits.qu.at(j.id());
+        urdfLimits.lower = limits.ql.at(j.name());
+        urdfLimits.upper = limits.qu.at(j.name());
       }
 
-      if(exist(limits.vl, j.id()) && exist(limits.vu, j.id()))
+      if(exist(limits.vl, j.name()) && exist(limits.vu, j.name()))
       {
-        urdfLimits.velocity = std::min(std::abs(limits.vl.at(j.id())),
-                                       limits.vu.at(j.id()));
+        urdfLimits.velocity = std::min(std::abs(limits.vl.at(j.name())),
+                                       limits.vu.at(j.name()));
       }
 
-      if(exist(limits.tl, j.id()) && exist(limits.tu, j.id()))
+      if(exist(limits.tl, j.name()) && exist(limits.tu, j.name()))
       {
-        urdfLimits.effort = std::min(std::abs(limits.tl.at(j.id())),
-                                     limits.tu.at(j.id()));
+        urdfLimits.effort = std::min(std::abs(limits.tl.at(j.name())),
+                                     limits.tu.at(j.name()));
       }
       joint.limits = boost::make_shared<urdf::JointLimits>(urdfLimits);
     }

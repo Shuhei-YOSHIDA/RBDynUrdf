@@ -36,12 +36,12 @@ struct Limits
 
   Limits& operator=(const Limits& limit);
 
-  /// joints position lower and upper bounds by joint id.
-  std::map<int, double> ql, qu;
-  /// joints velocity lower and upper bounds by joint id.
-  std::map<int, double> vl, vu;
-  /// joints torque lower and upper bounds by joint id.
-  std::map<int, double> tl, tu;
+  /// joints position lower and upper bounds by joint name.
+  std::map<std::string, double> ql, qu;
+  /// joints velocity lower and upper bounds by joint name.
+  std::map<std::string, double> vl, vu;
+  /// joints torque lower and upper bounds by joint name.
+  std::map<std::string, double> tl, tu;
 };
 
 

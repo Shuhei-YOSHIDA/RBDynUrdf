@@ -77,9 +77,7 @@ Urdf mbgFromModel(const boost::shared_ptr<urdf::ModelInterface>& model)
 
   Urdf urdf;
 
-  std::unordered_map<std::string, int> linkNameToId;
 
-  int linkId = 0;
   for(const auto& it: model->links_)
   {
     sva::RBInertiad inertia(0., Eigen::Vector3d::Zero(), Eigen::Matrix3d::Zero());
@@ -106,42 +104,33 @@ Urdf mbgFromModel(const boost::shared_ptr<urdf::ModelInterface>& model)
       inertia = sva::RBInertiad(mass, com.translation()*mass, inertiaMat);
     }
 
-    rbd::Body body(inertia, linkId, it.second->name);
+    rbd::Body body(inertia, it.second->name);
     urdf.mbg.addBody(body);
-    // store name to id map
-    linkNameToId[it.second->name] = linkId;
-
-    ++linkId;
   }
 
-  int jointId = 0;
   for(const auto& it: model->joints_)
   {
-    int jointParentId = linkNameToId[it.second->parent_link_name];
-    int jointChildId = linkNameToId[it.second->child_link_name];
-
     sva::PTransformd staticTf(poseToPTransform(it.second->parent_to_joint_origin_transform));
     rbd::Joint::Type jType = urdfJointTypeToRbd(it.second->type);
 
     // create rbd joint type from urdf joint
-    rbd::Joint joint(jType, toEigen(it.second->axis), true, jointId, it.second->name);
+    rbd::Joint joint(jType, toEigen(it.second->axis), true, it.second->name);
     urdf.mbg.addJoint(joint);
-    urdf.mbg.linkBodies(jointParentId, staticTf,
-                   jointChildId, sva::PTransformd::Identity(), jointId);
+    urdf.mbg.linkBodies(it.second->parent_link_name, staticTf,
+                   it.second->child_link_name, sva::PTransformd::Identity(),
+                   it.second->name);
 
 
     // fill joint limits
     if(it.second->limits)
     {
-      urdf.limits.ql[jointId] = it.second->limits->lower;
-      urdf.limits.qu[jointId] = it.second->limits->upper;
-      urdf.limits.vl[jointId] = -it.second->limits->velocity;
-      urdf.limits.vu[jointId] = it.second->limits->velocity;
-      urdf.limits.tl[jointId] = -it.second->limits->effort;
-      urdf.limits.tu[jointId] = it.second->limits->effort;
+      urdf.limits.ql[it.second->name] = it.second->limits->lower;
+      urdf.limits.qu[it.second->name] = it.second->limits->upper;
+      urdf.limits.vl[it.second->name] = -it.second->limits->velocity;
+      urdf.limits.vu[it.second->name] = it.second->limits->velocity;
+      urdf.limits.tl[it.second->name] = -it.second->limits->effort;
+      urdf.limits.tu[it.second->name] = it.second->limits->effort;
     }
-
-    ++jointId;
   }
 
   return std::move(urdf);
